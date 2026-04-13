@@ -4,4 +4,7 @@ export const Palette = {
   border: '#E8ECEF',
   pink: '#FF2B75',
   textMain: '#111416',
+  white: '#FFFFFF',
+  secondary: '#57626F',
+  tertiary: '#EFF2F7',
 }
