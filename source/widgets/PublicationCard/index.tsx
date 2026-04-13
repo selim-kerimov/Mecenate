@@ -3,10 +3,11 @@ import { Palette } from '@/shared/constants'
 import type { Post } from '@/shared/openapi/requests/types.gen'
 import { StyledText } from '@/shared/ui/StyledText'
 import { Image } from 'expo-image'
+import { useRef } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { BlurredImage } from './BlurredImage'
 import { Description } from './Description'
-import { Like } from './Like'
+import { Like, LikeRef } from './Like'
 import { PublicImage } from './PublicationImage'
 
 interface Props {
@@ -14,6 +15,8 @@ interface Props {
 }
 
 export const PublicationCard = ({ post }: Props) => {
+  const likeRef = useRef<LikeRef>(null)
+
   return (
     <View style={styles.main}>
       <View style={styles.header}>
@@ -26,7 +29,7 @@ export const PublicationCard = ({ post }: Props) => {
       {post.tier === 'paid' ? (
         <BlurredImage uri={post.coverUrl} />
       ) : (
-        <PublicImage uri={post.coverUrl} />
+        <PublicImage uri={post.coverUrl} onDoubleTap={() => likeRef.current?.like()} />
       )}
 
       <View style={styles.body}>
@@ -39,6 +42,7 @@ export const PublicationCard = ({ post }: Props) => {
 
         <View style={styles.bottom}>
           <Like
+            ref={likeRef}
             postId={post.id!}
             initialCount={post.likesCount ?? 0}
             initialLiked={post.isLiked ?? false}

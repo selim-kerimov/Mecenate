@@ -5,9 +5,10 @@ import { Pressable, StyleSheet, View } from 'react-native'
 
 interface Props {
   uri?: string
+  onDoubleTap?: () => void
 }
 
-export const PublicImage = ({ uri }: Props) => {
+export const PublicImage = ({ uri, onDoubleTap }: Props) => {
   const lastTap = useRef<number | null>(null)
   const [showLottie, setShowLottie] = useState(false)
   const DOUBLE_PRESS_DELAY = 300 // milliseconds
@@ -30,6 +31,7 @@ export const PublicImage = ({ uri }: Props) => {
       lastTap.current = null // Reset
 
       playAnimation()
+      onDoubleTap?.()
     } else {
       // Single press
       lastTap.current = now

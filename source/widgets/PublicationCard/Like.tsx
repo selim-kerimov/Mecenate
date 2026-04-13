@@ -4,7 +4,7 @@ import { Palette } from '@/shared/constants'
 import { FontFamily } from '@/shared/constants/FontFamily'
 import { usePostPostsByIdLike } from '@/shared/openapi/queries/queries'
 import * as Haptics from 'expo-haptics'
-import { useState } from 'react'
+import { forwardRef, useImperativeHandle, useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
   Easing,
@@ -27,7 +27,14 @@ interface Props {
   initialLiked: boolean
 }
 
-export const Like = ({ postId, initialCount, initialLiked }: Props) => {
+export interface LikeRef {
+  like: () => void
+}
+
+export const Like = forwardRef<LikeRef, Props>(function Like(
+  { postId, initialCount, initialLiked },
+  ref,
+) {
   const [liked, setLiked] = useState(initialLiked)
   const [displayNumber, setDisplayNumber] = useState(initialCount)
 
@@ -50,10 +57,9 @@ export const Like = ({ postId, initialCount, initialLiked }: Props) => {
     },
   )
 
-  const handlePress = () => {
+  const animateLike = (nextLiked: boolean) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
 
-    const nextLiked = !liked
     setLiked(nextLiked)
 
     const newValue = nextLiked ? targetValue.value + 1 : targetValue.value - 1
@@ -81,6 +87,16 @@ export const Like = ({ postId, initialCount, initialLiked }: Props) => {
       easing: Easing.out(Easing.cubic),
     })
   }
+
+  const handlePress = () => animateLike(!liked)
+
+  useImperativeHandle(ref, () => ({
+    like: () => {
+      if (!liked) {
+        animateLike(true)
+      }
+    },
+  }))
 
   const containerStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(likeProgress.value, [0, 1], [Palette.tertiary, Palette.pink]),
@@ -113,7 +129,7 @@ export const Like = ({ postId, initialCount, initialLiked }: Props) => {
       <Animated.Text style={[styles.text, textStyle]}>{displayNumber}</Animated.Text>
     </AnimatedPressable>
   )
-}
+})
 
 const styles = StyleSheet.create({
   action: {
