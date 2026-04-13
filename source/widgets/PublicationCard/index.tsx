@@ -4,6 +4,7 @@ import type { Post } from '@/shared/openapi/requests/types.gen'
 import { StyledText } from '@/shared/ui/StyledText'
 import { Image } from 'expo-image'
 import { Pressable, StyleSheet, View } from 'react-native'
+import { BlurredImage } from './BlurredImage'
 import { Like } from './Like'
 import { PublicImage } from './PublicationImage'
 
@@ -21,7 +22,11 @@ export const PublicationCard = ({ post }: Props) => {
         </StyledText>
       </View>
 
-      <PublicImage uri={post.coverUrl} />
+      {post.tier === 'paid' ? (
+        <BlurredImage uri={post.coverUrl} />
+      ) : (
+        <PublicImage uri={post.coverUrl} />
+      )}
 
       <View style={styles.body}>
         <View style={{ gap: 8 }}>
