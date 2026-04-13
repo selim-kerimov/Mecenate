@@ -1,10 +1,13 @@
-import PostImage from '@/assets/dev/post.png'
 import { Image } from 'expo-image'
 import LottieView from 'lottie-react-native'
 import { useRef, useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 
-export const PublicImage = () => {
+interface Props {
+  uri?: string
+}
+
+export const PublicImage = ({ uri }: Props) => {
   const lastTap = useRef<number | null>(null)
   const [showLottie, setShowLottie] = useState(false)
   const DOUBLE_PRESS_DELAY = 300 // milliseconds
@@ -35,7 +38,7 @@ export const PublicImage = () => {
 
   return (
     <Pressable onPress={handleDoublePress} style={styles.main}>
-      <Image source={PostImage} style={styles.image} />
+      <Image source={{ uri }} style={styles.image} />
 
       {showLottie && (
         <View style={styles.lottieContainer}>

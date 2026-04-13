@@ -13,4 +13,7 @@ import type { ClientOptions as ClientOptions2 } from './types.gen';
  */
 export type CreateClientConfig<T extends ClientOptions = ClientOptions2> = (override?: Config<ClientOptions & T>) => Config<Required<ClientOptions> & T>;
 
-export const client = createClient(createConfig<ClientOptions2>({ baseUrl: 'https://k8s.mectest.ru/test-app' }));
+export const client = createClient(createConfig<ClientOptions2>({
+  baseUrl: 'https://k8s.mectest.ru/test-app',
+  auth: '550e8400-e29b-41d4-a716-446655440000',
+}));

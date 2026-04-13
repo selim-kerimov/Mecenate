@@ -1,40 +1,48 @@
-import AvatarImage from '@/assets/dev/avatar.png'
 import BubbleIcon from '@/assets/icons/bubble.svg'
 import { Palette } from '@/shared/constants'
+import type { Post } from '@/shared/openapi/requests/types.gen'
 import { StyledText } from '@/shared/ui/StyledText'
 import { Image } from 'expo-image'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { Like } from './Like'
 import { PublicImage } from './PublicationImage'
 
-export const PublicationCard = () => {
+interface Props {
+  post: Post
+}
+
+export const PublicationCard = ({ post }: Props) => {
   return (
     <View style={styles.main}>
       <View style={styles.header}>
-        <Image source={AvatarImage} style={styles.avatar} />
+        <Image source={{ uri: post.author?.avatarUrl }} style={styles.avatar} />
         <StyledText size={15} weight={700}>
-          Петр Федько
+          {post.author?.displayName}
         </StyledText>
       </View>
 
-      <PublicImage />
+      <PublicImage uri={post.coverUrl} />
 
       <View style={styles.body}>
         <View style={{ gap: 8 }}>
           <StyledText weight={700} size={17}>
-            Подготовка к лету
+            {post.title}
           </StyledText>
           <StyledText size={15} weight={500}>
-            Когда вы начинаете бегать по утрам, но чувствуете, что каждый шаг дается
+            {post.preview}
           </StyledText>
         </View>
 
         <View style={styles.bottom}>
-          <Like />
+          <Like
+            postId={post.id!}
+            initialCount={post.likesCount ?? 0}
+            initialLiked={post.isLiked ?? false}
+          />
           <Pressable style={styles.action}>
             <BubbleIcon color={Palette.secondary} />
             <StyledText size={13} weight={700} color="secondary">
-              19
+              {post.commentsCount ?? 0}
             </StyledText>
           </Pressable>
         </View>

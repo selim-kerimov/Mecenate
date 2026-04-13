@@ -2,6 +2,7 @@ import HeartFilledIcon from '@/assets/icons/heart-filled.svg'
 import HeartIcon from '@/assets/icons/heart.svg'
 import { Palette } from '@/shared/constants'
 import { FontFamily } from '@/shared/constants/FontFamily'
+import { usePostPostsByIdLike } from '@/shared/openapi/queries/queries'
 import * as Haptics from 'expo-haptics'
 import { useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
@@ -20,15 +21,23 @@ import { scheduleOnRN } from 'react-native-worklets'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
-export const Like = () => {
-  const [liked, setLiked] = useState(false)
-  const [displayNumber, setDisplayNumber] = useState(12)
+interface Props {
+  postId: string
+  initialCount: number
+  initialLiked: boolean
+}
 
-  const targetValue = useSharedValue(12)
-  const animatedNumber = useSharedValue(12)
+export const Like = ({ postId, initialCount, initialLiked }: Props) => {
+  const [liked, setLiked] = useState(initialLiked)
+  const [displayNumber, setDisplayNumber] = useState(initialCount)
+
+  const likeMutation = usePostPostsByIdLike()
+
+  const targetValue = useSharedValue(initialCount)
+  const animatedNumber = useSharedValue(initialCount)
   const scale = useSharedValue(1)
   const opacity = useSharedValue(1)
-  const likeProgress = useSharedValue(0)
+  const likeProgress = useSharedValue(initialLiked ? 1 : 0)
 
   const rounded = useDerivedValue(() => Math.round(animatedNumber.value))
 
@@ -49,6 +58,8 @@ export const Like = () => {
 
     const newValue = nextLiked ? targetValue.value + 1 : targetValue.value - 1
     targetValue.value = newValue
+
+    likeMutation.mutate({ path: { id: postId } })
 
     likeProgress.value = withTiming(nextLiked ? 1 : 0, {
       duration: 250,
