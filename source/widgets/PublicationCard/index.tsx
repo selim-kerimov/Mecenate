@@ -5,6 +5,7 @@ import { StyledText } from '@/shared/ui/StyledText'
 import { Image } from 'expo-image'
 import { useRef } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
+import { BlurredBody } from './BlurredBody'
 import { BlurredImage } from './BlurredImage'
 import { Description } from './Description'
 import { Like, LikeRef } from './Like'
@@ -16,6 +17,7 @@ interface Props {
 
 export const PublicationCard = ({ post }: Props) => {
   const likeRef = useRef<LikeRef>(null)
+  const isPaid = post.tier === 'paid'
 
   return (
     <View style={styles.main}>
@@ -26,35 +28,39 @@ export const PublicationCard = ({ post }: Props) => {
         </StyledText>
       </View>
 
-      {post.tier === 'paid' ? (
+      {isPaid ? (
         <BlurredImage uri={post.coverUrl} />
       ) : (
         <PublicImage uri={post.coverUrl} onDoubleTap={() => likeRef.current?.like()} />
       )}
 
-      <View style={styles.body}>
-        <View style={{ gap: 8 }}>
-          <StyledText weight={700} size={17}>
-            {post.title}
-          </StyledText>
-          <Description preview={post.preview} body={post.body} />
-        </View>
-
-        <View style={styles.bottom}>
-          <Like
-            ref={likeRef}
-            postId={post.id!}
-            initialCount={post.likesCount ?? 0}
-            initialLiked={post.isLiked ?? false}
-          />
-          <Pressable style={styles.action}>
-            <BubbleIcon color={Palette.secondary} />
-            <StyledText size={13} weight={700} color="secondary">
-              {post.commentsCount ?? 0}
+      {isPaid ? (
+        <BlurredBody />
+      ) : (
+        <View style={styles.body}>
+          <View style={{ gap: 8 }}>
+            <StyledText weight={700} size={17}>
+              {post.title}
             </StyledText>
-          </Pressable>
+            <Description preview={post.preview} body={post.body} />
+          </View>
+
+          <View style={styles.bottom}>
+            <Like
+              ref={likeRef}
+              postId={post.id!}
+              initialCount={post.likesCount ?? 0}
+              initialLiked={post.isLiked ?? false}
+            />
+            <Pressable style={styles.action}>
+              <BubbleIcon color={Palette.secondary} />
+              <StyledText size={13} weight={700} color="secondary">
+                {post.commentsCount ?? 0}
+              </StyledText>
+            </Pressable>
+          </View>
         </View>
-      </View>
+      )}
     </View>
   )
 }

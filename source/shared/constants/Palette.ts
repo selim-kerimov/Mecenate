@@ -7,4 +7,5 @@ export const Palette = {
   white: '#FFFFFF',
   secondary: '#57626F',
   tertiary: '#EFF2F7',
+  lightGray: '#EEEFF1CC',
 }
