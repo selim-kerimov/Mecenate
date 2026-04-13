@@ -5,6 +5,7 @@ import { StyledText } from '@/shared/ui/StyledText'
 import { Image } from 'expo-image'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { BlurredImage } from './BlurredImage'
+import { Description } from './Description'
 import { Like } from './Like'
 import { PublicImage } from './PublicationImage'
 
@@ -33,9 +34,7 @@ export const PublicationCard = ({ post }: Props) => {
           <StyledText weight={700} size={17}>
             {post.title}
           </StyledText>
-          <StyledText size={15} weight={500}>
-            {post.preview}
-          </StyledText>
+          <Description preview={post.preview} body={post.body} />
         </View>
 
         <View style={styles.bottom}>
