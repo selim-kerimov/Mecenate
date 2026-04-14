@@ -4,6 +4,7 @@ import { useLocalSearchParams } from 'expo-router'
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useComments } from './model/useComments'
+import { useCommentsWebSocket } from './model/useCommentsWebSocket'
 import { usePostDetail } from './model/usePostDetail'
 import { CommentItem } from './ui/CommentItem'
 import { CommentsHeader } from './ui/Comments'
@@ -15,6 +16,7 @@ export const PostDetailPage = () => {
   const insets = useSafeAreaInsets()
   const { post, isLoading } = usePostDetail(id!)
   const { comments, isFetchingNextPage, handleEndReached } = useComments(id!)
+  useCommentsWebSocket(id!)
 
   if (isLoading) {
     return <ActivityIndicator style={{ flex: 1, backgroundColor: Palette.background }} />

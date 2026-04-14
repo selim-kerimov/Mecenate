@@ -1,5 +1,6 @@
 import { useGetPostsByIdCommentsKey, usePostPostsByIdComments } from '@/shared/openapi/queries'
 import { useQueryClient } from '@tanstack/react-query'
+import { Keyboard } from 'react-native'
 
 export const useCommentCreate = (id: string | undefined) => {
   const queryClient = useQueryClient()
@@ -15,6 +16,7 @@ export const useCommentCreate = (id: string | undefined) => {
         },
       },
     )
+    Keyboard.dismiss()
   }
 
   return handleSubmitComment
