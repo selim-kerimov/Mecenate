@@ -10,4 +10,6 @@ export const Palette = {
   lightGray: '#EEEFF1CC',
   gray: '#68727D',
   placeholder: '#A4AAB0',
+
+  accent200: '#D5C9FF',
 }

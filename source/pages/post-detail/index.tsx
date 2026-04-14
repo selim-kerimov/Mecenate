@@ -3,8 +3,8 @@ import { PublicationCard } from '@/widgets/PublicationCard'
 import { useLocalSearchParams } from 'expo-router'
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { usePostDetail } from './model/usePostDetail'
 import { useComments } from './model/useComments'
+import { usePostDetail } from './model/usePostDetail'
 import { CommentItem } from './ui/CommentItem'
 import { CommentsHeader } from './ui/Comments'
 import { NewCommentForm } from './ui/NewCommentForm'
@@ -50,7 +50,7 @@ export const PostDetailPage = () => {
         showsVerticalScrollIndicator={false}
       />
 
-      <NewCommentForm />
+      <NewCommentForm postId={id} />
     </View>
   )
 }

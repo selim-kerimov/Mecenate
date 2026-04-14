@@ -1,5 +1,5 @@
-import { StyledText } from '@/shared/ui/StyledText'
 import type { Comment } from '@/shared/openapi/requests/types.gen'
+import { StyledText } from '@/shared/ui/StyledText'
 import { Image } from 'expo-image'
 import { StyleSheet, View } from 'react-native'
 
@@ -10,14 +10,9 @@ type Props = {
 export const CommentItem = ({ comment }: Props) => {
   return (
     <View style={styles.main}>
-      <Image
-        source={
-          comment.author?.avatarUrl
-            ? { uri: comment.author.avatarUrl }
-            : require('@/assets/dev/avatar.png')
-        }
-        style={styles.avatar}
-      />
+      {comment.author?.avatarUrl && (
+        <Image source={comment.author.avatarUrl} style={styles.avatar} />
+      )}
       <View style={styles.text}>
         <StyledText size={15} weight={700}>
           {comment.author?.displayName ?? comment.author?.username ?? 'Аноним'}
