@@ -3,6 +3,7 @@ import { Palette } from '@/shared/constants'
 import type { Post } from '@/shared/openapi/requests/types.gen'
 import { StyledText } from '@/shared/ui/StyledText'
 import { Image } from 'expo-image'
+import { useRouter } from 'expo-router'
 import { useRef } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import { BlurredBody } from './BlurredBody'
@@ -17,10 +18,11 @@ interface Props {
 
 export const PublicationCard = ({ post }: Props) => {
   const likeRef = useRef<LikeRef>(null)
+  const router = useRouter()
   const isPaid = post.tier === 'paid'
 
   return (
-    <View style={styles.main}>
+    <Pressable style={styles.main} onPress={() => router.push(`/posts/${post.id}`)}>
       <View style={styles.header}>
         <Image source={{ uri: post.author?.avatarUrl }} style={styles.avatar} />
         <StyledText size={15} weight={700}>
@@ -39,7 +41,7 @@ export const PublicationCard = ({ post }: Props) => {
       ) : (
         <View style={styles.body}>
           <View style={{ gap: 8 }}>
-            <StyledText weight={700} size={17}>
+            <StyledText weight={700} size={17} style={{ lineHeight: 26 }}>
               {post.title}
             </StyledText>
             <Description preview={post.preview} body={post.body} />
@@ -61,7 +63,7 @@ export const PublicationCard = ({ post }: Props) => {
           </View>
         </View>
       )}
-    </View>
+    </Pressable>
   )
 }
 

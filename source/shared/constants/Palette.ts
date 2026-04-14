@@ -8,4 +8,6 @@ export const Palette = {
   secondary: '#57626F',
   tertiary: '#EFF2F7',
   lightGray: '#EEEFF1CC',
+  gray: '#68727D',
+  placeholder: '#A4AAB0',
 }
