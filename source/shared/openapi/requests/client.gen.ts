@@ -15,5 +15,5 @@ export type CreateClientConfig<T extends ClientOptions = ClientOptions2> = (over
 
 export const client = createClient(createConfig<ClientOptions2>({
   baseUrl: 'https://k8s.mectest.ru/test-app',
-  auth: '550e8400-e29b-41d4-a716-446655440000',
+  auth: process.env.EXPO_PUBLIC_USER_ID,
 }));
