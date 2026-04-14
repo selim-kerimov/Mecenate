@@ -14,15 +14,20 @@ import { PublicImage } from './PublicationImage'
 
 interface Props {
   post: Post
+  asLink?: boolean
 }
 
-export const PublicationCard = ({ post }: Props) => {
+export const PublicationCard = ({ post, asLink }: Props) => {
   const likeRef = useRef<LikeRef>(null)
   const router = useRouter()
   const isPaid = post.tier === 'paid'
 
+  const handleNavigate = () => {
+    if (asLink) router.push(`/posts/${post.id}`)
+  }
+
   return (
-    <Pressable style={styles.main} onPress={() => router.push(`/posts/${post.id}`)}>
+    <Pressable style={styles.main} onPress={handleNavigate}>
       <View style={styles.header}>
         <Image source={{ uri: post.author?.avatarUrl }} style={styles.avatar} />
         <StyledText size={15} weight={700}>
@@ -54,7 +59,7 @@ export const PublicationCard = ({ post }: Props) => {
               initialCount={post.likesCount ?? 0}
               initialLiked={post.isLiked ?? false}
             />
-            <Pressable style={styles.action}>
+            <Pressable style={styles.action} onPress={handleNavigate}>
               <BubbleIcon color={Palette.secondary} />
               <StyledText size={13} weight={700} color="secondary">
                 {post.commentsCount ?? 0}

@@ -1,11 +1,15 @@
 import { StyledText } from '@/shared/ui/StyledText'
 import { Pressable, StyleSheet, View } from 'react-native'
 
-export const CommentsHeader = () => {
+type Props = {
+  count: number
+}
+
+export const CommentsHeader = ({ count }: Props) => {
   return (
     <View style={styles.main}>
       <StyledText color="gray" size={15} weight={500}>
-        4 комментария
+        {count} комментария
       </StyledText>
 
       <Pressable>

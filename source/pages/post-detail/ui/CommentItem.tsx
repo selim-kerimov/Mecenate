@@ -1,26 +1,29 @@
-import HeartIcon from '@/assets/icons/heart.svg'
-import { Palette } from '@/shared/constants'
 import { StyledText } from '@/shared/ui/StyledText'
+import type { Comment } from '@/shared/openapi/requests/types.gen'
 import { Image } from 'expo-image'
 import { StyleSheet, View } from 'react-native'
 
-export const CommentItem = () => {
+type Props = {
+  comment: Comment
+}
+
+export const CommentItem = ({ comment }: Props) => {
   return (
     <View style={styles.main}>
-      <Image source={require('@/assets/dev/avatar.png')} style={styles.avatar} />
+      <Image
+        source={
+          comment.author?.avatarUrl
+            ? { uri: comment.author.avatarUrl }
+            : require('@/assets/dev/avatar.png')
+        }
+        style={styles.avatar}
+      />
       <View style={styles.text}>
         <StyledText size={15} weight={700}>
-          Леша Крид
+          {comment.author?.displayName ?? comment.author?.username ?? 'Аноним'}
         </StyledText>
         <StyledText size={14} weight={500}>
-          Хороший гайд)
-        </StyledText>
-      </View>
-
-      <View style={styles.likeContainer}>
-        <HeartIcon color={Palette.secondary} />
-        <StyledText color="secondary" size={13} weight={700}>
-          3
+          {comment.text}
         </StyledText>
       </View>
     </View>

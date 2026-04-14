@@ -4,6 +4,7 @@ import { useLocalSearchParams } from 'expo-router'
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { usePostDetail } from './model/usePostDetail'
+import { useComments } from './model/useComments'
 import { CommentItem } from './ui/CommentItem'
 import { CommentsHeader } from './ui/Comments'
 import { NewCommentForm } from './ui/NewCommentForm'
@@ -12,6 +13,7 @@ export const PostDetailPage = () => {
   const { id } = useLocalSearchParams<{ id: string }>()
   const insets = useSafeAreaInsets()
   const { post, isLoading } = usePostDetail(id!)
+  const { comments, isFetchingNextPage, handleEndReached } = useComments(id!)
 
   if (isLoading) {
     return <ActivityIndicator style={{ flex: 1, backgroundColor: Palette.background }} />
@@ -22,15 +24,24 @@ export const PostDetailPage = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={[1, 2, 3]}
-        renderItem={() => <CommentItem />}
+        data={comments}
+        keyExtractor={(item) => item.id!}
+        renderItem={({ item }) => <CommentItem comment={item} />}
         ListHeaderComponent={() => (
           <>
             <PublicationCard post={post} />
-            <CommentsHeader />
+            <CommentsHeader count={post.commentsCount ?? 0} />
           </>
         )}
-        ListFooterComponent={() => <View style={styles.bottomPadding} />}
+        ListFooterComponent={() =>
+          isFetchingNextPage ? (
+            <ActivityIndicator style={{ paddingVertical: 12 }} />
+          ) : (
+            <View style={styles.bottomPadding} />
+          )
+        }
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.5}
         style={styles.main}
         contentContainerStyle={{
           paddingTop: insets.top,

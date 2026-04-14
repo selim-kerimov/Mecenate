@@ -15,7 +15,7 @@ export const HomePage = () => {
     <FlatList
       data={posts}
       keyExtractor={(item) => item.id!}
-      renderItem={({ item }) => <PublicationCard post={item} />}
+      renderItem={({ item }) => <PublicationCard post={item} asLink />}
       ListHeaderComponent={() => <Tabs value={activeTab} onChange={setActiveTab} />}
       ListEmptyComponent={isLoading ? () => <ActivityIndicator style={{ marginTop: 32 }} /> : null}
       ListFooterComponent={
