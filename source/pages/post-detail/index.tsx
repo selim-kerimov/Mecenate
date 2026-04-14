@@ -7,6 +7,7 @@ import { useComments } from './model/useComments'
 import { usePostDetail } from './model/usePostDetail'
 import { CommentItem } from './ui/CommentItem'
 import { CommentsHeader } from './ui/Comments'
+import { KeyboardFakeView } from './ui/KeyboardFakeView'
 import { NewCommentForm } from './ui/NewCommentForm'
 
 export const PostDetailPage = () => {
@@ -51,6 +52,7 @@ export const PostDetailPage = () => {
       />
 
       <NewCommentForm postId={id} />
+      <KeyboardFakeView />
     </View>
   )
 }

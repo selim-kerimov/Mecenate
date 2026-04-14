@@ -1,8 +1,7 @@
 import PaperPlaneIcon from '@/assets/icons/paper-plane.svg'
 import { Palette } from '@/shared/constants'
 import { useForm } from '@tanstack/react-form'
-import { Platform, Pressable, StyleSheet, TextInput, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { Pressable, StyleSheet, TextInput, View } from 'react-native'
 import { useCommentCreate } from '../model/useCommentCreate'
 
 interface Props {
@@ -10,8 +9,6 @@ interface Props {
 }
 
 export const NewCommentForm = ({ postId }: Props) => {
-  const insets = useSafeAreaInsets()
-  const paddingBottom = Platform.OS === 'ios' ? insets.bottom : insets.bottom + 13
   const onSubmit = useCommentCreate(postId)
 
   const form = useForm({
@@ -23,7 +20,7 @@ export const NewCommentForm = ({ postId }: Props) => {
   })
 
   return (
-    <View style={[styles.main, { paddingBottom }]}>
+    <View style={styles.main}>
       <form.Field
         name="text"
         validators={{
@@ -60,6 +57,7 @@ const styles = StyleSheet.create({
   main: {
     paddingHorizontal: 16,
     paddingTop: 16,
+    paddingBottom: 12,
     backgroundColor: 'white',
     borderTopColor: Palette.border,
     borderTopWidth: 1,
