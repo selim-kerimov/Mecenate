@@ -12,4 +12,5 @@ export const Palette = {
   placeholder: '#A4AAB0',
 
   accent200: '#D5C9FF',
+  accent600: '#4E11A4',
 }
