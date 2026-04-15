@@ -1,50 +1,68 @@
-# Welcome to your Expo app 👋
+# Mecenate
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An [Expo](https://expo.dev) React Native app.
 
-## Get started
+## Prerequisites
 
-1. Install dependencies
+- Node.js (LTS)
+- [pnpm](https://pnpm.io/) (this repo ships with a `pnpm-lock.yaml`)
+- For native runs: Xcode (iOS) and/or Android Studio + an emulator
+
+## Setup
+
+1. **Install dependencies**
 
    ```bash
-   npm install
+   pnpm install
    ```
 
-2. Start the app
+2. **Create your `.env`**
+
+   Copy the example file and fill in the values:
 
    ```bash
-   npx expo start
+   cp .env.example .env
    ```
 
-In the output, you'll find options to open the app in a
+   The two variables you need are:
+   - `EXPO_PUBLIC_OPEN_API_URL` — URL of the backend OpenAPI schema
+     (`openapi.json`). Only used by the `codegen` script; you don't need
+     it for a regular `pnpm ios` / `pnpm android` run because the
+     generated client is already checked in.
+   - `EXPO_PUBLIC_USER_ID` — bearer token used to authenticate API
+     requests. Read at app startup in `source/app/api/configureClient.ts`,
+     which calls `client.setConfig({ auth })` on the generated fetch
+     client so every request carries the token.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Running the app
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- **iOS (native build)**
 
-## Get a fresh project
+  ```bash
+  pnpm ios
+  ```
 
-When you're ready, run:
+- **Android (native build)**
 
-```bash
-npm run reset-project
-```
+  ```bash
+  pnpm android
+  ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- **Dev server only**
 
-## Learn more
+  ```bash
+  pnpm start
+  ```
 
-To learn more about developing your project with Expo, look at the following resources:
+  Then press `i`/`a` in the terminal to open on iOS/Android, or scan
+  the QR code with a development build.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Useful scripts
 
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- `pnpm lint` — run ESLint with autofix
+- `pnpm format` — run Prettier
+- `pnpm codegen` — regenerate the API client from the OpenAPI schema.
+  Optional — only needed when the backend contract changes. Requires
+  `EXPO_PUBLIC_OPEN_API_URL` to be set in `.env`. The script wipes
+  `source/shared/openapi` and recreates the typed fetch client plus all
+  React Query hooks used throughout the app.
