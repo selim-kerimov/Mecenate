@@ -83,6 +83,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "1fa77d05-fe71-4ffd-b5f8-1e2b837ede5e"
+      }
+    },
+    "owner": "selim-kerimov"
   }
 }
