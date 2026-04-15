@@ -18,7 +18,7 @@ export const AuthorSchema = {
         avatarUrl: {
             type: 'string',
             format: 'uri',
-            example: 'https://i.pravatar.cc/150?u=author_1'
+            example: 'https://s3.regru.cloud/mecenate-test-picture/logo1.webm'
         },
         bio: {
             type: 'string',
@@ -60,7 +60,7 @@ export const PostSchema = {
         coverUrl: {
             type: 'string',
             format: 'uri',
-            example: 'https://picsum.photos/seed/post_1/800/450'
+            example: 'https://s3.regru.cloud/mecenate-test-picture/pic1.jpeg'
         },
         likesCount: {
             type: 'integer',
