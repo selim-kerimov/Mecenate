@@ -25,7 +25,7 @@ export const Description = ({ preview, body }: Props) => {
     <StyledText size={15} weight={500}>
       {trimmed}
       {'... '}
-      <StyledText color="accent" onPress={() => setExpanded(true)}>
+      <StyledText color="accent" onPress={() => setExpanded(true)} suppressHighlighting={true}>
         Показать еще
       </StyledText>
     </StyledText>
