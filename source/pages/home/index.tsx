@@ -1,8 +1,16 @@
 import { Palette } from '@/shared/constants'
 import { PublicationCard } from '@/widgets/PublicationCard'
-import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from 'react-native'
+import {
+  ActivityIndicator,
+  FlatList,
+  Platform,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { usePostsFeed } from './model/usePostsFeed'
+import { FetchFailed } from './ui/FetchFailed'
 import { Tabs } from './ui/Tabs'
 
 export const HomePage = () => {
@@ -11,6 +19,8 @@ export const HomePage = () => {
   const {
     posts,
     isLoading,
+    isError,
+    refetch,
     isFetchingNextPage,
     handleEndReached,
     activeTab,
@@ -19,40 +29,52 @@ export const HomePage = () => {
     isRefetching,
   } = usePostsFeed()
 
+  const topOffset = insets.top + 16
+
+  if (isError && posts.length === 0) {
+    return (
+      <View style={[styles.main, { paddingTop: topOffset, paddingBottom: insets.bottom }]}>
+        <FetchFailed onRetry={refetch} />
+      </View>
+    )
+  }
+
   return (
-    <View style={[styles.main, { paddingTop: insets.top + 16 }]}>
-      <FlatList
-        data={posts}
-        keyExtractor={(item) => item.id!}
-        renderItem={({ item }) => <PublicationCard post={item} asLink />}
-        ListHeaderComponent={
-          <View style={{ gap: 16 }}>
-            <Tabs value={activeTab} onChange={setActiveTab} />
-          </View>
-        }
-        ListEmptyComponent={
-          isLoading ? () => <ActivityIndicator style={{ marginTop: 32 }} /> : null
-        }
-        ListFooterComponent={
-          isFetchingNextPage ? () => <ActivityIndicator style={{ marginVertical: 16 }} /> : null
-        }
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.5}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefetching}
-            onRefresh={handleRefresh}
-            tintColor={Palette.accent}
-            colors={[Palette.accent]}
-          />
-        }
-        contentContainerStyle={{
-          paddingBottom: insets.bottom,
-          gap: 16,
-        }}
-        showsVerticalScrollIndicator={false}
-      />
-    </View>
+    <FlatList
+      data={posts}
+      keyExtractor={(item) => item.id!}
+      renderItem={({ item }) => <PublicationCard post={item} asLink />}
+      ListHeaderComponent={
+        <View style={{ gap: 16 }}>
+          <Tabs value={activeTab} onChange={setActiveTab} />
+        </View>
+      }
+      ListEmptyComponent={isLoading ? () => <ActivityIndicator style={{ marginTop: 32 }} /> : null}
+      ListFooterComponent={
+        isFetchingNextPage ? () => <ActivityIndicator style={{ marginVertical: 16 }} /> : null
+      }
+      onEndReached={handleEndReached}
+      onEndReachedThreshold={0.5}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetching}
+          onRefresh={handleRefresh}
+          tintColor={Palette.accent}
+          colors={[Palette.accent]}
+          progressViewOffset={topOffset}
+        />
+      }
+      style={styles.main}
+      contentContainerStyle={{
+        paddingTop: Platform.OS === 'android' ? topOffset : 0,
+        paddingBottom: insets.bottom,
+        gap: 16,
+      }}
+      contentInset={Platform.OS === 'ios' ? { top: topOffset } : undefined}
+      contentOffset={Platform.OS === 'ios' ? { x: 0, y: -topOffset } : undefined}
+      automaticallyAdjustContentInsets={false}
+      showsVerticalScrollIndicator={false}
+    />
   )
 }
 

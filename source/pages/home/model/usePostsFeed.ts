@@ -12,7 +12,7 @@ export const usePostsFeed = () => {
 
   const tier = activeTab === 'all' ? undefined : (activeTab as 'free' | 'paid')
 
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
     useInfiniteQuery({
       queryKey: [useGetPostsKey, { tier }],
       queryFn: async ({ pageParam }) => {
@@ -47,6 +47,8 @@ export const usePostsFeed = () => {
   return {
     posts,
     isLoading,
+    isError,
+    refetch,
     isFetchingNextPage,
     handleEndReached,
     activeTab,
