@@ -45,6 +45,7 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@types/react": "~19.1.0",
+    "babel-plugin-transform-remove-console": "^6.9.4",
     "commitlint": "^20.5.0",
     "cross-var": "^1.1.0",
     "del-cli": "^7.0.0",

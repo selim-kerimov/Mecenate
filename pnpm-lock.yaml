@@ -102,6 +102,9 @@ importers:
       '@types/react':
         specifier: ~19.1.0
         version: 19.1.17
+      babel-plugin-transform-remove-console:
+        specifier: ^6.9.4
+        version: 6.9.4
       commitlint:
         specifier: ^20.5.0
         version: 20.5.0(@types/node@25.6.0)(conventional-commits-parser@6.4.0)(typescript@5.9.3)
@@ -2139,6 +2142,9 @@ packages:
 
   babel-plugin-transform-regenerator@6.26.0:
     resolution: {integrity: sha512-LS+dBkUGlNR15/5WHKe/8Neawx663qttS6AGqoOUhICc9d1KciBvtrQSuc0PI+CxQ2Q/S1aKuJ+u64GtLdcEZg==}
+
+  babel-plugin-transform-remove-console@6.9.4:
+    resolution: {integrity: sha512-88blrUrMX3SPiGkT1GnvVY8E/7A+k6oj3MNvUtTIxJflFzXTw1bHkuJ/y039ouhFMp2prRn5cQGzokViYi1dsg==}
 
   babel-plugin-transform-strict-mode@6.24.1:
     resolution: {integrity: sha512-j3KtSpjyLSJxNoCDrhwiJad8kw0gJ9REGj8/CqL0HeRyLnvUNYV9zcqluL6QJSXh3nfsLEmSLvwRfGzrgR96Pw==}
@@ -8190,6 +8196,8 @@ snapshots:
   babel-plugin-transform-regenerator@6.26.0:
     dependencies:
       regenerator-transform: 0.10.1
+
+  babel-plugin-transform-remove-console@6.9.4: {}
 
   babel-plugin-transform-strict-mode@6.24.1:
     dependencies:
