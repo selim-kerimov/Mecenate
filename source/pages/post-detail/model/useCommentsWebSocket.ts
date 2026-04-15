@@ -1,5 +1,5 @@
-import { useGetPostsByIdCommentsKey } from '@/shared/openapi/queries/common'
 import { useWebSocket, type WsEvent } from '@/shared/hooks/useWebSocket'
+import { useGetPostsByIdCommentsKey } from '@/shared/openapi/queries/common'
 import type { Comment, CommentsResponse } from '@/shared/openapi/requests/types.gen'
 import { useQueryClient, type InfiniteData } from '@tanstack/react-query'
 import { useCallback } from 'react'
@@ -20,40 +20,48 @@ export const useCommentsWebSocket = (postId: string) => {
 
       console.log('[WS:Comments] New comment received:', event)
 
+      if (!event.comment?.id) {
+        console.log('[WS:Comments] Missing comment payload, skipping')
+        return
+      }
+
       const newComment: Comment = {
-        id: event.id,
-        postId: event.postId,
-        author: event.author as Comment['author'],
-        text: event.text,
-        createdAt: event.createdAt,
+        id: event.comment.id,
+        postId: event.comment.postId ?? event.postId,
+        author: event.comment.author,
+        text: event.comment.text,
+        createdAt: event.comment.createdAt,
       }
 
       queryClient.setQueryData<InfiniteData<CommentsResponse>>(
         [useGetPostsByIdCommentsKey, { postId }],
         (old) => {
-          if (!old) return old
+          if (!old || old.pages.length === 0) return old
 
-          const firstPage = old.pages[0]
-          const existingComments = firstPage?.data?.comments ?? []
-
-          if (existingComments.some((c) => c.id === newComment.id)) {
+          const alreadyExists = old.pages.some((page) =>
+            (page?.data?.comments ?? []).some((c) => c.id === newComment.id),
+          )
+          if (alreadyExists) {
             console.log('[WS:Comments] Duplicate comment, skipping:', newComment.id)
             return old
           }
 
           console.log('[WS:Comments] Adding comment to cache:', newComment.id)
 
-          const updatedFirstPage: CommentsResponse = {
-            ...firstPage,
+          const lastIndex = old.pages.length - 1
+          const lastPage = old.pages[lastIndex]
+
+          const updatedLastPage: CommentsResponse = {
+            ...lastPage,
             data: {
-              ...firstPage?.data,
-              comments: [newComment, ...existingComments],
+              ...lastPage?.data,
+              comments: [...(lastPage?.data?.comments ?? []), newComment],
             },
           }
 
           return {
             ...old,
-            pages: [updatedFirstPage, ...old.pages.slice(1)],
+            pages: [...old.pages.slice(0, lastIndex), updatedLastPage],
           }
         },
       )

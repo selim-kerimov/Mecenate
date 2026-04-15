@@ -5,17 +5,26 @@ const WS_URL = 'wss://k8s.mectest.ru/test-app/ws'
 const AUTH_TOKEN = '3B803BA1-FC43-41CD-8312-BA2C8DF0C89D'
 const RECONNECT_DELAY = 8000
 
+type WsCommentPayload = {
+  id: string
+  postId: string
+  author: {
+    id?: string
+    username?: string
+    displayName?: string
+    avatarUrl?: string
+    bio?: string
+    subscribersCount?: number
+    isVerified?: boolean
+  }
+  text: string
+  createdAt: string
+}
+
 export type WsEvent =
   | { type: 'ping' }
   | { type: 'like_updated'; postId: string; likesCount: number }
-  | {
-      type: 'comment_added'
-      id: string
-      postId: string
-      author: object
-      text: string
-      createdAt: string
-    }
+  | { type: 'comment_added'; postId: string; comment: WsCommentPayload }
 
 type Listener = (event: WsEvent) => void
 

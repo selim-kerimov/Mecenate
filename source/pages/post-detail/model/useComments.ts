@@ -21,7 +21,15 @@ export const useComments = (postId: string) => {
       lastPage?.data?.hasMore ? (lastPage.data.nextCursor ?? undefined) : undefined,
   })
 
-  const comments = data?.pages.flatMap((page) => page?.data?.comments ?? []) ?? []
+  const seen = new Set<string>()
+  const comments =
+    data?.pages
+      .flatMap((page) => page?.data?.comments ?? [])
+      .filter((c) => {
+        if (!c.id || seen.has(c.id)) return false
+        seen.add(c.id)
+        return true
+      }) ?? []
 
   const handleEndReached = () => {
     if (hasNextPage && !isFetchingNextPage) {
