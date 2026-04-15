@@ -1,7 +1,8 @@
 import { Palette } from '@/shared/constants'
+import { LoadingIndicator } from '@/shared/ui/LoadingIndicator'
 import { PublicationCard } from '@/widgets/PublicationCard'
 import { useLocalSearchParams } from 'expo-router'
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useComments } from './model/useComments'
 import { useCommentsWebSocket } from './model/useCommentsWebSocket'
@@ -19,7 +20,7 @@ export const PostDetailPage = () => {
   useCommentsWebSocket(id!)
 
   if (isLoading) {
-    return <ActivityIndicator style={{ flex: 1, backgroundColor: Palette.background }} />
+    return <LoadingIndicator style={{ flex: 1, backgroundColor: Palette.background }} />
   }
 
   if (!post) return null
@@ -38,7 +39,7 @@ export const PostDetailPage = () => {
         }
         ListFooterComponent={
           isFetchingNextPage ? (
-            <ActivityIndicator style={{ paddingVertical: 12 }} />
+            <LoadingIndicator style={{ paddingVertical: 12 }} />
           ) : (
             <View style={styles.bottomPadding} />
           )

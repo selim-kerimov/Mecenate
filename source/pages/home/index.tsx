@@ -1,13 +1,7 @@
 import { Palette } from '@/shared/constants'
+import { LoadingIndicator } from '@/shared/ui/LoadingIndicator'
 import { PublicationCard } from '@/widgets/PublicationCard'
-import {
-  ActivityIndicator,
-  FlatList,
-  Platform,
-  RefreshControl,
-  StyleSheet,
-  View,
-} from 'react-native'
+import { FlatList, Platform, RefreshControl, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { usePostsFeed } from './model/usePostsFeed'
 import { FetchFailed } from './ui/FetchFailed'
@@ -49,9 +43,13 @@ export const HomePage = () => {
           <Tabs value={activeTab} onChange={setActiveTab} />
         </View>
       }
-      ListEmptyComponent={isLoading ? () => <ActivityIndicator style={{ marginTop: 32 }} /> : null}
+      ListEmptyComponent={
+        isLoading ? () => <LoadingIndicator size={24} style={{ marginTop: 32 }} /> : null
+      }
       ListFooterComponent={
-        isFetchingNextPage ? () => <ActivityIndicator style={{ marginVertical: 16 }} /> : null
+        isFetchingNextPage
+          ? () => <LoadingIndicator size={24} style={{ marginVertical: 16 }} />
+          : null
       }
       onEndReached={handleEndReached}
       onEndReachedThreshold={0.5}
