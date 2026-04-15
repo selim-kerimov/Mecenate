@@ -1,3 +1,5 @@
+import '@/app/api/configureClient'
+
 import { TanstackQueryProvider } from '@/app/providers/TanstackQueryProvider'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
