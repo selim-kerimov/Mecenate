@@ -2,22 +2,10 @@ import HeartFilledIcon from '@/assets/icons/heart-filled.svg'
 import HeartIcon from '@/assets/icons/heart.svg'
 import { Palette } from '@/shared/constants'
 import { FontFamily } from '@/shared/constants/FontFamily'
-import { usePostPostsByIdLike } from '@/shared/openapi/queries/queries'
-import * as Haptics from 'expo-haptics'
-import { forwardRef, useImperativeHandle, useState } from 'react'
+import { forwardRef, useImperativeHandle } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
-import Animated, {
-  Easing,
-  interpolateColor,
-  useAnimatedReaction,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withSequence,
-  withSpring,
-  withTiming,
-} from 'react-native-reanimated'
-import { scheduleOnRN } from 'react-native-worklets'
+import Animated from 'react-native-reanimated'
+import { useLike } from './useLike'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -35,86 +23,17 @@ export const Like = forwardRef<LikeRef, Props>(function Like(
   { postId, initialCount, initialLiked },
   ref,
 ) {
-  const [liked, setLiked] = useState(initialLiked)
-  const [displayNumber, setDisplayNumber] = useState(initialCount)
+  const {
+    displayNumber,
+    handlePress,
+    likeIfNotLiked,
+    containerStyle,
+    textStyle,
+    outlineIconStyle,
+    filledIconStyle,
+  } = useLike({ postId, initialCount, initialLiked })
 
-  const likeMutation = usePostPostsByIdLike()
-
-  const targetValue = useSharedValue(initialCount)
-  const animatedNumber = useSharedValue(initialCount)
-  const scale = useSharedValue(1)
-  const opacity = useSharedValue(1)
-  const likeProgress = useSharedValue(initialLiked ? 1 : 0)
-
-  const rounded = useDerivedValue(() => Math.round(animatedNumber.value))
-
-  useAnimatedReaction(
-    () => rounded.value,
-    (current, previous) => {
-      if (current !== previous) {
-        scheduleOnRN(setDisplayNumber, current)
-      }
-    },
-  )
-
-  const animateLike = (nextLiked: boolean) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
-
-    setLiked(nextLiked)
-
-    const newValue = nextLiked ? targetValue.value + 1 : targetValue.value - 1
-    targetValue.value = newValue
-
-    likeMutation.mutate({ path: { id: postId } })
-
-    likeProgress.value = withTiming(nextLiked ? 1 : 0, {
-      duration: 250,
-      easing: Easing.out(Easing.cubic),
-    })
-
-    scale.value = withSequence(
-      withTiming(0.7, { duration: 100, easing: Easing.out(Easing.quad) }),
-      withSpring(1, { damping: 20, stiffness: 600, overshootClamping: true }),
-    )
-
-    opacity.value = withSequence(
-      withTiming(0.6, { duration: 100, easing: Easing.out(Easing.quad) }),
-      withTiming(1, { duration: 200, easing: Easing.out(Easing.cubic) }),
-    )
-
-    animatedNumber.value = withTiming(newValue, {
-      duration: 280,
-      easing: Easing.out(Easing.cubic),
-    })
-  }
-
-  const handlePress = () => animateLike(!liked)
-
-  useImperativeHandle(ref, () => ({
-    like: () => {
-      if (!liked) {
-        animateLike(true)
-      }
-    },
-  }))
-
-  const containerStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(likeProgress.value, [0, 1], [Palette.tertiary, Palette.pink]),
-  }))
-
-  const textStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
-    opacity: opacity.value,
-    color: interpolateColor(likeProgress.value, [0, 1], [Palette.secondary, Palette.white]),
-  }))
-
-  const outlineIconStyle = useAnimatedStyle(() => ({
-    opacity: 1 - likeProgress.value,
-  }))
-
-  const filledIconStyle = useAnimatedStyle(() => ({
-    opacity: likeProgress.value,
-  }))
+  useImperativeHandle(ref, () => ({ like: likeIfNotLiked }))
 
   return (
     <AnimatedPressable style={[styles.action, containerStyle]} onPress={handlePress}>

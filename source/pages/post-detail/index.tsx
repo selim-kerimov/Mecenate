@@ -30,13 +30,13 @@ export const PostDetailPage = () => {
         data={comments}
         keyExtractor={(item) => item.id!}
         renderItem={({ item }) => <CommentItem comment={item} />}
-        ListHeaderComponent={() => (
+        ListHeaderComponent={
           <>
             <PublicationCard post={post} />
             <CommentsHeader count={post.commentsCount ?? 0} />
           </>
-        )}
-        ListFooterComponent={() =>
+        }
+        ListFooterComponent={
           isFetchingNextPage ? (
             <ActivityIndicator style={{ paddingVertical: 12 }} />
           ) : (

@@ -29,7 +29,7 @@ export const PublicationCard = ({ post, asLink }: Props) => {
   return (
     <Pressable style={styles.main} onPress={handleNavigate}>
       <View style={styles.header}>
-        <Image source={{ uri: post.author?.avatarUrl }} style={styles.avatar} />
+        <Image source={post.author?.avatarUrl} style={styles.avatar} />
         <StyledText size={15} weight={700}>
           {post.author?.displayName}
         </StyledText>

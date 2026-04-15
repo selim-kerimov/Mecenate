@@ -13,7 +13,7 @@ interface Props {
 export const BlurredImage = ({ uri }: Props) => {
   return (
     <View style={styles.container}>
-      <Image source={{ uri }} style={styles.image} blurRadius={40} />
+      <Image source={uri} style={styles.image} blurRadius={40} />
       <View style={styles.overlay}>
         <View style={styles.icon}>
           <DollarIcon color={Palette.white} />

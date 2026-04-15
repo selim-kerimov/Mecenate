@@ -40,7 +40,7 @@ export const PublicImage = ({ uri, onDoubleTap }: Props) => {
 
   return (
     <Pressable onPress={handleDoublePress} style={styles.main}>
-      <Image source={{ uri }} style={styles.image} />
+      <Image source={uri} style={styles.image} />
 
       {showLottie && (
         <View style={styles.lottieContainer}>
