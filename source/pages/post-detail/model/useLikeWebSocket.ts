@@ -1,4 +1,4 @@
-import { useWebSocket, WsEvent } from '@/shared/hooks/useWebSocket'
+import { useWebSocket, type WsEvent } from '@/shared/hooks/useWebSocket'
 import { useGetPostsByIdKey, useGetPostsKey } from '@/shared/openapi/queries/common'
 import type { Post, PostDetailResponse, PostsResponse } from '@/shared/openapi/requests/types.gen'
 import { useQueryClient } from '@tanstack/react-query'

@@ -1,5 +1,4 @@
 import { TanstackQueryProvider } from '@/app/providers/TanstackQueryProvider'
-import { GlobalWebSocketListener } from '@/features/GlobalWebSocketListener'
 import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { Platform } from 'react-native'
@@ -11,7 +10,6 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <KeyboardProvider>
         <TanstackQueryProvider>
-          <GlobalWebSocketListener />
           {Platform.OS === 'android' && <StatusBar style="dark" translucent />}
           <Stack screenOptions={{ headerShown: false }} />
         </TanstackQueryProvider>

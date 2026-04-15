@@ -6,6 +6,7 @@ import { FlatList, StyleSheet, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useComments } from './model/useComments'
 import { useCommentsWebSocket } from './model/useCommentsWebSocket'
+import { useLikeWebSocket } from './model/useLikeWebSocket'
 import { usePostDetail } from './model/usePostDetail'
 import { CommentItem } from './ui/CommentItem'
 import { CommentsHeader } from './ui/Comments'
@@ -18,6 +19,7 @@ export const PostDetailPage = () => {
   const { post, isLoading } = usePostDetail(id!)
   const { comments, isFetchingNextPage, handleEndReached } = useComments(id!)
   useCommentsWebSocket(id!)
+  useLikeWebSocket()
 
   if (isLoading) {
     return <LoadingIndicator style={{ flex: 1, backgroundColor: Palette.background }} />
