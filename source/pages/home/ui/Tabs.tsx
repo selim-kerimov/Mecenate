@@ -38,7 +38,7 @@ export const Tabs = ({ onChange, value }: Props) => {
 
   return (
     <View style={styles.main}>
-      <Animated.View style={[styles.pill, pillStyle]} />
+      <Animated.View pointerEvents="none" style={[styles.pill, pillStyle]} />
       {options.map((item, index) => {
         const isActive = item.value === value
         return (
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: Palette.accent,
     borderRadius: 999,
     width: PILL_WIDTH,
+    pointerEvents: 'none',
   },
   item: {
     flex: 1,
