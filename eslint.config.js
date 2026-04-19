@@ -5,6 +5,6 @@ const expoConfig = require('eslint-config-expo/flat')
 module.exports = defineConfig([
   expoConfig,
   {
-    ignores: ['dist/*', 'src/shared/openapi/**'],
+    ignores: ['dist/*', 'source/shared/openapi/**'],
   },
 ])
